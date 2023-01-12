@@ -1,7 +1,8 @@
 package com.borymskyi.task1;
 
 /**
- * This class implements two methods to encode and decode a string using the Rail Fence Cipher.
+ * TASK 1
+ * <p>This class implements two methods to encode and decode a string using the Rail Fence Cipher.
  *
  * @author  Dmytrii Borymskyi
  */
