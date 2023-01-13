@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * TASK 2
- * <p>This class contains solutions to the second problem "Print a new number by adding one to each of its digit"
+ * <p>This class contains solutions to the second task "Print a new number by adding one to each of its digit"
  *
  * @author  Dmytrii Borymskyi
  */
