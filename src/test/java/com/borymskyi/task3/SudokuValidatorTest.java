@@ -17,10 +17,9 @@ class SudokuValidatorTest {
 
     @Test
     void testValidateWrongPreparedSudoku() {
-        ValidationNumbersException thrown = Assertions.assertThrows(ValidationNumbersException.class, () -> {
-            this.sudokuValidator.validatePreparedSudoku(getWrongSudokuBySize(9));
-        });
-        Assertions.assertEquals(ValidationNumbersException.class, thrown.getClass());
+        boolean resultValidation = this.sudokuValidator
+                .validatePreparedSudoku(getWrongSudokuBySize(9));
+        assertFalse(resultValidation);
     }
 
     public int[][] getWrongSudokuBySize(int sizeSudoku) {

@@ -22,9 +22,14 @@ public class SudokuValidator {
      * @return true if validation was successful otherwise throw {@link com.borymskyi.task3.ValidationNumbersException}
      */
     public boolean validatePreparedSudoku(int[][] preparedSudoku){
-        validateSizePassedSudoku(preparedSudoku);
-        validateNumbers(preparedSudoku);
-        printSudoku(preparedSudoku);
+        try {
+            validateSizePassedSudoku(preparedSudoku);
+            validateNumbers(preparedSudoku);
+            printSudoku(preparedSudoku);
+        } catch (ValidationNumbersException e) {
+            System.err.println(". . . ." + e.getMessage() + ". . . .");
+            return false;
+        }
         return true;
     }
 
