@@ -1,0 +1,81 @@
+CREATE DATABASE my_shop;
+
+CREATE TABLE supplier
+(
+    supplier_id   SERIAL PRIMARY KEY,
+    supplier_name VARCHAR(128) NOT NULL,
+    city          VARCHAR(128) NOT NULL,
+    country       VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE categories
+(
+    category_id   SERIAL PRIMARY KEY,
+    category_name VARCHAR(128) NOT NULL UNIQUE,
+    description   VARCHAR(512)
+);
+
+CREATE TABLE products
+(
+    product_id   SERIAL PRIMARY KEY,
+    product_name VARCHAR(128) NOT NULL,
+    supplier_id  INT REFERENCES supplier (supplier_id),
+    category_id  INT REFERENCES products (product_id),
+    price        money
+);
+
+INSERT INTO categories(category_name, description)
+VALUES ('Beverages', 'Soft drinks, coffees, teas, beers, and ales'),
+       ('Condiments', 'Sweet and savory sauces, relishes, spreads, and seasonings'),
+       ('Confections', 'Desserts, candies, and sweet breads'),
+       ('Dairy Products', 'Cheeses'),
+       ('Grains/Cereals', 'Breads, crackers, pasta, and cereal');
+
+INSERT INTO supplier(supplier_name, city, country)
+VALUES ('Exotic Liquid', 'London', 'UK'),
+       ('New Orleans Cajun Delights', 'New Orleans', 'USA'),
+       ('Grandma Kelly’s Homestead', 'Ann Arbor', 'USA'),
+       ('Tokyo Traders', 'Tokyo', 'Japan'),
+       ('Cooperativa de Quesos ‘Las Cabras’', 'Oviedo', 'Spain');
+
+INSERT INTO products(product_name, supplier_id, category_id, price)
+VALUES ('Chais', 1, 1, 18.00),
+       ('Chang', 1, 1, 19.00),
+       ('Aniseed Syrup', 1, 2, 10.00),
+       ('Chef Anton’s Cajun Seasoning', 2, 2, 22.00),
+       ('Chef Anton’s Gumbo Mix', 2, 2, 21.35);
+
+-- Select product with product name that begins with ‘C’
+SELECT product_name
+FROM products
+WHERE product_name LIKE 'C%';
+
+-- Select product with the smallest price.
+SELECT min(price)
+FROM products;
+
+-- Select cost of all products from the USA
+SELECT sum(price)
+FROM products
+         JOIN supplier
+              ON products.supplier_id = supplier.supplier_id
+WHERE country = 'USA';
+
+-- Select suppliers that supply Condiments.
+SELECT DISTINCT supplier_name
+FROM products
+         JOIN public.supplier s ON products.supplier_id = s.supplier_id
+         JOIN categories c ON products.category_id = c.category_id
+WHERE category_name = 'Condiments';
+
+-- Add to database new supplier with name:
+-- ‘Norske Meierier’, city: ‘Lviv’, country: ‘Ukraine’
+-- which will supply new product with name:
+-- ‘Green tea’, price: 10,
+-- and related to category with name:
+-- ‘Beverages’.
+INSERT INTO supplier(supplier_name, city, country)
+VALUES ('Norske Meierier', 'Lviv', 'Ukraine');
+
+INSERT INTO products(product_name, supplier_id, category_id, price)
+VALUES ('Green tea', 6, 1, 10);
