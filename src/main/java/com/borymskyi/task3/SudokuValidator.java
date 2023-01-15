@@ -1,5 +1,7 @@
 package com.borymskyi.task3;
 
+import java.util.List;
+
 /**
  * TASK 3
  * <p>This class contains solutions to the third task "Validate Sudoku with size NxN"
@@ -19,13 +21,12 @@ public class SudokuValidator {
      * </ul>
 
      * @param preparedSudoku
-     * @return true if validation was successful otherwise throw {@link com.borymskyi.task3.ValidationNumbersException}
+     * @return true if validation was successful otherwise false.
      */
-    public boolean validatePreparedSudoku(int[][] preparedSudoku){
+    public boolean validatePreparedSudoku(List<List<Integer>> preparedSudoku){
         try {
             validateSizePassedSudoku(preparedSudoku);
             validateNumbers(preparedSudoku);
-            printSudoku(preparedSudoku);
         } catch (ValidationNumbersException e) {
             System.err.println(". . . ." + e.getMessage() + ". . . .");
             return false;
@@ -33,69 +34,60 @@ public class SudokuValidator {
         return true;
     }
 
-    private void printSudoku(int[][] sudoku) {
-        for (int i = 0; i < sudoku.length; i++) {
-            for (int j = 0; j < sudoku.length; j++) {
-                System.out.print(sudoku[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    private void validateSizePassedSudoku(int[][] passedSudoku) {
-        int size = passedSudoku.length;
+    private void validateSizePassedSudoku(List<List<Integer>> preparedSudoku) {
+        int size = preparedSudoku.size();
         if (size < 1 || Math.sqrt(size) % 1 != 0) {
-            throw new IllegalArgumentException(
-                    String.format("You entered wrong count: %d", passedSudoku.length));
+            throw new ValidationNumbersException(
+                    String.format("You entered wrong count: %d", preparedSudoku.size()));
         }
         for (int i = 0; i < size; i++) {
-            if (passedSudoku[i].length > size) {
-                throw new IllegalArgumentException(
-                        String.format("You entered wrong count: %d", passedSudoku[i].length));
-            }
-        }
-    }
-
-    private void validateNumbers(int[][] sudoku) {
-        for (int i = 0; i < sudoku.length; i++) {
-            validateRow(sudoku, i);
-            validColumn(sudoku, i);
-        }
-        validateSquares(sudoku);
-    }
-
-    private void validateRow(int[][] sudoku, int row) {
-        for (int i = 0; i < sudoku.length; i++) {
-            if (sudoku[row][i] < 1 || sudoku[row][i] > sudoku.length) {
+            if (preparedSudoku.get(i).size() > size) {
                 throw new ValidationNumbersException(
-                        String.format("Invalid value in row: %d", sudoku[row][i]));
+                        String.format("You entered wrong count: %d", preparedSudoku.get(i).size()));
             }
-            for (int j = i+1; j < sudoku.length; j++) {
-                if (sudoku[row][i] == sudoku[row][j]){
+        }
+    }
+
+    private void validateNumbers(List<List<Integer>> preparedSudoku) {
+        for (int i = 0; i < preparedSudoku.size(); i++) {
+            validateRow(preparedSudoku, i);
+            validColumn(preparedSudoku, i);
+        }
+        validateSquares(preparedSudoku);
+    }
+
+    private void validateRow(List<List<Integer>> preparedSudoku, int row) {
+        for (int i = 0; i < preparedSudoku.size(); i++) {
+            if (preparedSudoku.get(row).get(i) < 1 || preparedSudoku.get(row).get(i) > preparedSudoku.size()) {
+                throw new ValidationNumbersException(
+                        String.format("Invalid value in row: %d", preparedSudoku.get(row).get(i)));
+            }
+            for (int j = i+1; j < preparedSudoku.size(); j++) {
+                if (preparedSudoku.get(row).get(i).equals(preparedSudoku.get(row).get(j))){
                     throw new ValidationNumbersException(
-                            String.format("Invalid value in row: %d", sudoku[row][j]));
+                            String.format("Invalid value in row: %d", preparedSudoku.get(row).get(i)));
                 }
             }
         }
     }
 
-    private void validColumn(int[][] sudoku, int column) {
-        for (int i = 0; i < sudoku[0].length; i++) {
-            if (sudoku[i][column] < 1 || sudoku[i][column] > sudoku.length) {
+    private void validColumn(List<List<Integer>> preparedSudoku, int column) {
+        for (int i = 0; i < preparedSudoku.get(0).size(); i++) {
+            if (preparedSudoku.get(i).get(column) < 1 || preparedSudoku.get(i).get(column) > preparedSudoku.size()) {
                 throw new ValidationNumbersException(
-                        String.format("Invalid value in column: %d", sudoku[i][column]));
+                        String.format("Invalid value in column: %d", preparedSudoku.get(i).get(column)));
             }
-            for (int j = i+1; j < sudoku.length; j++) {
-                if (sudoku[i][column] == sudoku[j][column]) {
+            for (int j = i+1; j < preparedSudoku.size(); j++) {
+                if (preparedSudoku.get(i).get(column).equals(preparedSudoku.get(j).get(column))) {
                     throw new ValidationNumbersException(
-                            String.format("Invalid value in colum: %d", sudoku[i][column]));
+                            String.format("Invalid value in colum: %d", preparedSudoku.get(i).get(column)));
                 }
             }
         }
     }
 
-    private void validateSquares(int[][] sudoku) {
-        int square = (int)Math.round(Math.sqrt(sudoku.length));
+    private void validateSquares(List<List<Integer>> preparedSudoku) {
+        int square = (int)Math.round(Math.sqrt(preparedSudoku.size()));
         int startRow = 0;
         int endRow = square;
 
@@ -103,7 +95,7 @@ public class SudokuValidator {
             int startColumn = 0;
             int endColumn = square;
             for (int j = 0; j < square; j++) {
-                runOverSquares(sudoku, startRow, endRow, startColumn, endColumn);
+                runOverSquares(preparedSudoku, startRow, endRow, startColumn, endColumn);
                 startColumn = startColumn + square;
                 endColumn = endColumn + square;
             }
@@ -112,13 +104,13 @@ public class SudokuValidator {
         }
     }
 
-    private void runOverSquares(int[][] sudoku, int startRow, int endRow, int startColumn, int endColumn) {
-        int[] saveNumbers = new int[sudoku.length];
+    private void runOverSquares(List<List<Integer>> preparedSudoku, int startRow, int endRow, int startColumn, int endColumn) {
+        int[] saveNumbers = new int[preparedSudoku.size()];
         int tempAddNumbers = 0;
 
         for (int row = startRow; row < endRow; row++) {
             for (int column = startColumn; column < endColumn; column++) {
-                saveNumbers[tempAddNumbers] = sudoku[row][column];
+                saveNumbers[tempAddNumbers] = preparedSudoku.get(row).get(column);
                 tempAddNumbers++;
             }
         }
