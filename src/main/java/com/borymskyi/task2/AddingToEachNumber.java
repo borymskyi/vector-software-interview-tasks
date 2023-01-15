@@ -10,39 +10,50 @@ import java.util.Scanner;
  */
 
 public class AddingToEachNumber {
+    
+    //Make sure you don’t transfer a number greater than 2147483647 because you are overwhelmed with int.
+    public void scanInputNumberAndPrintingNumberByAddingOneToEach() {
+        int number = 0;
+        int sizeNumber = 0;
 
-    public static void main(String[] args) {
-        System.out.println(new AddingToEachNumber().scanInputNumberAndPrintingNumberByAddingOneToEach());
-    }
+        number = getInputNumber();
+        sizeNumber = getSizeNumber(number, sizeNumber);
 
-    /**
-     * The method that accepts the number from the user and then adds 1 to each digit
-     * without using the possibility of {@link java.lang.String}. For example, 998 transforms in 10109
-     *
-     * @return int as a result of adding 1 to each digit of the user number.
-     */
-    public int scanInputNumberAndPrintingNumberByAddingOneToEach() {
-        var adding = -1;
-        int initialNumber = scanInputIntWithMessageForUser("Enter initial number: ");
-        return addOneToEachNumber(adding, initialNumber);
-    }
+        int[] result = new int[sizeNumber];
+        splitNumberByDigitsInArray(number, sizeNumber, result);
 
-    private int scanInputIntWithMessageForUser(String messageForTheUser) {
-        Scanner scan = new Scanner(System.in);
-        System.out.print(messageForTheUser);
-        return scan.nextInt();
-    }
-
-    private int addOneToEachNumber(int adding, int initialNumber) {
-        int result = 0;
-        var digits = (int) (Math.log(initialNumber) / Math.log(10));
-        for (int i = 0; i <= digits; i++ ) {
-            var digit = (int) ((initialNumber / (int) Math.pow(10, i))) % 10;
-            digit++;
-            adding++;
-            result += Math.pow(10, adding) * digit;
-            if (digit == 10) adding++;
+        System.out.println("Your number by adding one to each: ");
+        for (int i = 0; i < result.length; i++) {
+            System.out.print(result[i] + 1);
         }
-        return result;
+    }
+
+    private int getInputNumber() {
+        int userInputInteger = 0;
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Enter any number: \n");
+            userInputInteger = sc.nextInt();
+        } catch (RuntimeException e) {
+            System.err.println("You entered incorrect data!");
+        }
+        return userInputInteger;
+    }
+
+    private int getSizeNumber(int number, int sizeNumber) {
+        int temp = number;
+        while(temp > 0) {
+            temp = temp / 10;
+            sizeNumber++;
+        }
+        return sizeNumber;
+    }
+
+    private void splitNumberByDigitsInArray(int number, int sizeNumber, int[] result) {
+        int temp2 = sizeNumber -1;
+        for (int i = 0; i < sizeNumber; i++) {
+            result[i] = (number / (int)(Math.pow(10, temp2)) % 10);
+            temp2--;
+        }
     }
 }
