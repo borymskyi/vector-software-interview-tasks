@@ -7,7 +7,8 @@ These are my answers to the tasks that need to be performed in order to pass fur
 <br>It is also possible to test with JUnit 5.
 
 ### TASK 2: Print a new number by adding one to each of its digit
-* My answer: [Link 1](https://github.com/borymskyi/vector-software-interview-tasks/blob/master/src/main/java/com/borymskyi/task2/AddingToEachNumber.java).
+* My answer: [Link 1](https://github.com/borymskyi/vector-software-interview-tasks/blob/master/src/main/java/com/borymskyi/task2/AddingToEachNumber.java), [Link 2](https://github.com/borymskyi/vector-software-interview-tasks/tree/master/src/test/java/com/borymskyi/task2).
+<br>It is also possible to test with JUnit 5.
 
 ### TASK 3. Validate Sudoku with size NxN
 * My answer: [Link 1](https://github.com/borymskyi/vector-software-interview-tasks/tree/master/src/main/java/com/borymskyi/task3), [Link 2](https://github.com/borymskyi/vector-software-interview-tasks/blob/master/src/test/java/com/borymskyi/task3/SudokuValidatorTest.java).
